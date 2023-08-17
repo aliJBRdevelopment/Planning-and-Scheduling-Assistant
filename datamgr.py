@@ -28,7 +28,8 @@ class EmailManager:
         with open('data.csv', 'r') as file:
             reader = csv.reader(file)
             for row in reader:
-                if email in row:
+                print(email + " ::: " + row[1])
+                if email.lower() in row:
                     return False
         return True
     
@@ -37,30 +38,29 @@ class UserDetails:
         with open('data.csv', 'r') as file:
             reader = csv.reader(file)
             for row in reader:
-                if email in row:
-                    if PasswordManager.compare_password(password, row[3]):
+                if email.lower() in row:
+                    if PasswordManager.compare_password(password, row[2]):
                         return True
                     else:
-                        print(row[2])
                         return False
         return False
     
-    def register_user(email, forename, surname, password):
-        if EmailManager.is_valid_email(email):
+    def register_user(email,name,password):
+        if EmailManager.is_valid_email(email) & EmailManager.unique_email(email):
             pword = PasswordManager.hash_password(password)
             with open('data.csv', 'a', newline='') as file:
                 writer = csv.writer(file)
-                writer.writerow([forename, surname, pword])
+                writer.writerow([name, email.lower(), pword])
             return True
         else: 
             return False
 
 
 class EventMgr:
-    def save_task(title, date, participants, sub_tasks, completed_sub_tasks):
+    def save_task(title, date, participants, sub_tasks, completed_sub_tasks,id):
         with open('tasks.csv', 'a', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow([title, date, participants, sub_tasks, completed_sub_tasks])
+            writer.writerow(title, date, participants, sub_tasks, id)
         return True
     
     def get_task_byemail(email):
