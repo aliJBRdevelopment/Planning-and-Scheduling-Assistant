@@ -149,6 +149,3 @@ class RegLog():
     def login(self):
         self.root.destroy()
         log_screen = Login()
-
-
-regLogScreen = RegLog()
